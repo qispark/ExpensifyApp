@@ -78,6 +78,7 @@ class ReportActionsView extends React.Component {
         this.recordTimeToMeasureItemLayout = this.recordTimeToMeasureItemLayout.bind(this);
         this.scrollToBottomAndMarkReportAsRead = this.scrollToBottomAndMarkReportAsRead.bind(this);
         this.openReportIfNecessary = this.openReportIfNecessary.bind(this);
+        this.onViewableItemsChanged = this.onViewableItemsChanged.bind(this);
     }
 
     componentDidMount() {
@@ -332,6 +333,14 @@ class ReportActionsView extends React.Component {
         }
     }
 
+    onViewableItemsChanged(tokens) {
+      const ids = _.map(tokens.viewableItems, item => item.item.reportActionID)
+
+      if (ids.indexOf(this.state.reportActionId > -1)) {
+        this.setState({newMarkerReportActionID: ''});
+      }
+    }
+
     render() {
         // Comments have not loaded at all yet do nothing
         if (!_.size(this.props.reportActions)) {
@@ -352,6 +361,7 @@ class ReportActionsView extends React.Component {
                     isLoadingMoreReportActions={this.props.report.isLoadingMoreReportActions}
                     loadMoreChats={this.loadMoreChats}
                     newMarkerReportActionID={this.state.newMarkerReportActionID}
+                    onViewableItemsChanged={this.onViewableItemsChanged}
                 />
                 <PopoverReactionList
                     ref={ReactionList.reactionListRef}
