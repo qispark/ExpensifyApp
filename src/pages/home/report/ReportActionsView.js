@@ -68,6 +68,7 @@ class ReportActionsView extends React.Component {
         this.state = {
             isFloatingMessageCounterVisible: false,
             newMarkerReportActionID: ReportUtils.getNewMarkerReportActionID(this.props.report, props.reportActions),
+            newMarkerReportActionIDHasUpdated: false,
         };
 
         this.currentScrollOffset = 0;
@@ -334,11 +335,18 @@ class ReportActionsView extends React.Component {
     }
 
     onViewableItemsChanged(tokens) {
-      const ids = _.map(tokens.viewableItems, item => item.item.reportActionID)
+      if (this.state.newMarkerReportActionID === '') {
+        return;
+      }
+      if (this.state.newMarkerReportActionIDHasUpdated) {
+        return;
+      }
+      const ids = _.map(tokens.viewableItems, item => item.item.reportActionID);
 
       if (ids.indexOf(this.state.reportActionId > -1)) {
         this.setState({newMarkerReportActionID: ''});
       }
+      this.setState({newMarkerReportActionIDHasUpdated: true});
     }
 
     render() {
